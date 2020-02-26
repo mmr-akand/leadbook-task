@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Response as IlluminateResponse;
 use App\Http\Controllers\Controller;
 
@@ -33,10 +32,10 @@ class ApiController extends Controller
 
             $error['message'] = isset($errorDetails['message']) ? $errorDetails['message'] :  $message;
 
-            if ($errorDetails['type'] == 'incorrect_login') {
-                $error['errors']['error_title'] = 'Invalid login';
-                $error['errors']['error_feild'] = null;
+            if ($errorDetails['type'] == 'incorrect_password') {
+                $error['errors']['password'][] = 'The password is invalid';
             }
+
             unset($error['errors']['type']);
         } else {
             $error['message'] = $message;

@@ -42,4 +42,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Company');
     }
+
+    public function emailVerification()
+    {
+        return $this->hasOne(EmailVerification::class, 'email', 'email');
+    }
 }

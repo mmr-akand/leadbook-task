@@ -13,14 +13,21 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/login', 'Api\AuthController@login');
-Route::post('register', 'Api\UserController@store');
+Route::group(['as' => 'api.'], function() {
+	Route::post('/login', 'Api\AuthController@login');
+	Route::post('/register', 'Api\UserController@store');
 
-Route::group(['middleware' => ['auth:api']], function() {
-	Route::get('user', 'Api\UserController@index');
-	Route::get('user/{user}', 'Api\UserController@show');
-	Route::get('user/{user}/favourite', 'Api\UserController@favourite');
-	Route::post('user/{user}/update-favourite', 'Api\UserController@updateFavourite');
+	Route::post('/forget-password', 'Api\AuthController@forgetPassword');
+	Route::get('/check-reset-token/{token}', 'Api\AuthController@checkResetToken')->name('check_reset_token');
+	Route::post('/reset-password', 'Api\AuthController@resetPassword');
+});
+
+Route::group(['middleware' => ['auth:api'], 'as' => 'api.'], function() {	
+	Route::get('/email-verification/{token}', 'Api\AuthController@verifiyEmail')->name('verify_email');
+	Route::get('/user', 'Api\UserController@index');
+	Route::get('/user/{user}', 'Api\UserController@show');
+	Route::get('/user/{user}/favourite', 'Api\UserController@favourite');
+	Route::post('/user/{user}/update-favourite', 'Api\UserController@updateFavourite');
 
 	Route::get('/company', 'Api\CompanyController@index');
 	Route::post('/company/search', 'Api\CompanyController@search');
