@@ -49,6 +49,17 @@ class UserController extends Controller
     }
 
     /**
+     * Display the Company resource.
+     *
+     * @param User $user
+     * @return CompanyCollection
+     */
+    public function favourite(User $user)
+    {
+        return new CompanyCollection($user->favourite);
+    }
+
+    /**
      * Display a listing of the company resource.
      * @param User $user
      * @param FavouriteUpdateRequest $request

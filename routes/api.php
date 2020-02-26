@@ -13,13 +13,16 @@ use Illuminate\Http\Request;
 |
 */
 
-/*Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});*/
-Route::get('user', 'Api\UserController@index');
-Route::post('user', 'Api\UserController@store');
-Route::get('user/{user}', 'Api\UserController@show');
-Route::post('user/{user}/update-favourite', 'Api\UserController@updateFavourite');
+Route::post('/login', 'Api\AuthController@login');
+Route::post('register', 'Api\UserController@store');
 
-Route::get('/company', 'Api\CompanyController@index');
-Route::post('/company/search', 'Api\CompanyController@search');
+Route::group(['middleware' => ['auth:api']], function() {
+	Route::get('user', 'Api\UserController@index');
+	Route::get('user/{user}', 'Api\UserController@show');
+	Route::get('user/{user}/favourite', 'Api\UserController@favourite');
+	Route::post('user/{user}/update-favourite', 'Api\UserController@updateFavourite');
+
+	Route::get('/company', 'Api\CompanyController@index');
+	Route::post('/company/search', 'Api\CompanyController@search');
+	Route::post('/logout',  'Api\AuthController@logout');
+});

@@ -16,7 +16,7 @@ class UserResource extends JsonResource
     {
         $resource = parent::toArray($request);
 
-        $resource['favourite_companies'] = new CompanyCollection($this->favourites);
+        $resource['favourite_companies'] = new CompanyCollection($this->favourite);
 
         return $resource;
     }

@@ -14,16 +14,7 @@ class UserComponent
         $input['password'] = \Hash::make($input['password']);
 
         $user = User::create($input);
-        /*$user->customers()->attach($request->get('customer_id'), [
-            'role_id' => CustomerUserRole::ROLE_DEFAULT
-        ]);*/
 
         return $user;
     }
-
-    public function getCustomerUsers(Customer $customer)
-    {
-        return $customer->users()->paginate();
-    }
-
 }
