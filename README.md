@@ -7,10 +7,16 @@ To run the project you need to execute the following commands:
     composer install
     cp .env.example .env
     php artisan key:generate
-    php artisan migrate --seed
+    php artisan migrate
+    php artisan db:seed
     php artisan passport:install
     npm install
     npm run dev
+
+Before run migration please provide correct database credentials in .env file. You can use the following credentials to login:
+
+    Email: user@test.com
+    Password: 123456
 
 ## Using API
 
