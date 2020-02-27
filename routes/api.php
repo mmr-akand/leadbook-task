@@ -14,8 +14,8 @@ use Illuminate\Http\Request;
 */
 
 Route::group(['as' => 'api.'], function() {
-	Route::post('/login', 'Api\AuthController@login');
-	Route::post('/register', 'Api\UserController@store');
+	Route::post('/login', 'Api\AuthController@login')->name('login');
+	Route::post('/register', 'Api\UserController@store')->name('register');
 
 	Route::post('/forget-password', 'Api\AuthController@forgetPassword');
 	Route::get('/check-reset-token/{token}', 'Api\AuthController@checkResetToken')->name('check_reset_token');
@@ -27,9 +27,9 @@ Route::group(['middleware' => ['auth:api'], 'as' => 'api.'], function() {
 	Route::get('/user', 'Api\UserController@index');
 	Route::get('/user/{user}', 'Api\UserController@show');
 	Route::get('/user/{user}/favourite', 'Api\UserController@favourite');
-	Route::post('/user/{user}/update-favourite', 'Api\UserController@updateFavourite');
+	Route::post('/user/{user}/update-favourite', 'Api\UserController@updateFavourite')->name('update_favourite');
 
-	Route::get('/company', 'Api\CompanyController@index');
+	Route::get('/company', 'Api\CompanyController@index')->name('company');
 	Route::post('/company/search', 'Api\CompanyController@search');
 	Route::post('/logout',  'Api\AuthController@logout');
 });

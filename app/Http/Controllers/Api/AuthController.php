@@ -25,8 +25,12 @@ class AuthController extends ApiController
     	$email = $request->email;
     	$password = $request->password;
 
-    	$authManager = new AuthManager();
-        $loginUser = $authManager->login($email, $password);
+        try {
+            $authManager = new AuthManager();
+            $loginUser = $authManager->login($email, $password);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Internel error occurred'], 500);
+        }
 
         if (!$loginUser) {
         	return $this->respondErrorInDetails('Sorry! could not login.', $authManager->getError());
@@ -34,15 +38,23 @@ class AuthController extends ApiController
 
     	$res = $authManager->complete($request);
 
+        $this->content['type'] = 'Bearer';
+
         $this->content['token'] = $res['content']['token'];
+
+        $this->content['user'] = new UserResource($loginUser);
 
     	return response()->json(['data' => $this->content], $res['content']['status']);
     }
 
     public function verifiyEmail($token)
     {    
-        $authManager = new AuthManager();
-        $verification = $authManager->verifiyEmail($token);
+        try {
+            $authManager = new AuthManager();
+            $verification = $authManager->verifiyEmail($token);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Internel error occurred'], 500);
+        }
 
         if (!$verification) {
             return response()->json(['message' => 'Invalid Token'], 404);
@@ -53,16 +65,24 @@ class AuthController extends ApiController
 
     public function forgetPassword(ForgetPasswordRequest $request)
     {    
-        $authManager = new AuthManager();
-        $response = $authManager->forgetPassword($request);
+        try {
+            $authManager = new AuthManager();
+            $response = $authManager->forgetPassword($request);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Internel error occurred'], 500);
+        }
 
         return response()->json(['data' => $response], 200);
     }
 
     public function checkResetToken($token)
     {
-        $authManager = new AuthManager();
-        $reset = $authManager->checkResetToken($token, false);
+        try {
+            $authManager = new AuthManager();
+            $reset = $authManager->checkResetToken($token, false);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Internel error occurred'], 500);
+        }
 
         if (!$reset) {
             return response()->json(['message' => 'Invalid Token'], 404);
@@ -73,8 +93,12 @@ class AuthController extends ApiController
 
     public function resetPassword(ResetPasswordRequest $request)
     {
-        $authManager = new AuthManager();
-        $reset = $authManager->checkResetToken($request->token, $request->email);
+        try {
+            $authManager = new AuthManager();
+            $reset = $authManager->checkResetToken($request->token, $request->email);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Internel error occurred'], 500);
+        }
 
         if (!$reset) {
             return response()->json(['message' => 'Invalid Token'], 404);

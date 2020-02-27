@@ -16,11 +16,15 @@ class UserComponent
 
         $user = User::create($input);
 
-        EmailVerification::create([
-        	'email' => $input['email'],
-        	'token' => str_random(32),
-        	'expire' => date('Y-m-d H:i:s', strtotime('+1 day', time()))
-        ]);
+        $verificationData = [
+            'email' => $input['email'],
+            'token' => str_random(32),
+            'expire' => date('Y-m-d H:i:s', strtotime('+1 day', time()))
+        ];
+        
+        if (!EmailVerification::where('email', $input['email'])->exists()) {            
+            EmailVerification::create($verificationData);
+        }
 
         return $user;
     }
